@@ -26,14 +26,3 @@ $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = (int) $_SERVER['APP_DEBUG'] || filt
 
 $paths = array(dirname(__DIR__) . "/src/Entities");
 $isDevMode = false;
-
-$dbParams = array(
-	'host'     => 'localhost',
-    'driver'   => 'pdo_mysql',
-    'user'     => 'root',
-    'password' => '',
-    'dbname'   => 'testdb',
-);
-
-$config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
-$entityManager = EntityManager::create($dbParams, $config);
