@@ -1,0 +1,4 @@
+api:
+    type: rest
+    resource: '@App\Controller\UsersController'
+    name_prefix: api_

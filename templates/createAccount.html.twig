@@ -1,0 +1,71 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<script src="scripts/jquery34.js"></script>
+	<style>
+		input {
+			width: 150px;
+		}
+		.form {
+			display: contents;
+		}
+	</style>
+</head>
+<body style="font-family: helvetica; font-size: smaller;">
+
+<div style="display: grid">
+	<p>
+		Możesz teraz dodać nowego użytkownika:
+		<div class="form">Imię<input id="name" type="text"/></div>
+		<div class="form">Nazwisko<input id="surname" type="text"/></div>
+		<div class="form">Login<input id="login" type="text"/></div>
+		<div class="form">Hasło<input id="password" type="text"/></div>
+		<div style="display: block;" class="form">Admin<input style="width: 20px" id="admin" name="admin" type="checkbox" checked="checked"/></div>
+		</br>
+		<div><input id="addUser" type="submit" value="Dodaj" name="dodaj" /></div>
+		<div id="blad"></div>
+	</p>
+</div>
+
+<script>
+	$("#addUser").click(function() {
+		var name = $("#name").val();
+		var surname = $("#surname").val();
+		var login = $("#login").val();
+		var password = $("#password").val();
+		var admin = 0;
+		
+		if($("#admin").is(":checked")) {
+			admin = 1;
+		}
+
+		var url = "/api/addUser";
+
+		var data = {
+			"name": name,
+			"surname": surname,
+			"login": login,
+			"password": password,
+			"admin": admin
+		};
+		
+		$.ajax({
+			dataType: "json",
+			type: 'PUT',
+			url: url,
+			data: JSON.stringify(data),
+			contentType: 'application/json; charset=utf-8',
+			success: function(result) {
+				if(result["error"] != undefined) {
+					$("#blad").html('<span style="color: red">' + result["error"] + '</span>');
+				} 
+				if(result["success"] != undefined) {
+					$("#blad").html('<span style="color: blue">' + result["success"] + '</span>');
+				}
+			}
+		});
+	});
+</script>
+
+</body>
+</html>

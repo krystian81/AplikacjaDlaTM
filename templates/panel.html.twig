@@ -1,0 +1,106 @@
+﻿<html>
+<head>
+	<meta charset="utf-8"/>
+	<script src="scripts/jquery34.js"></script>
+	<style>
+		input {
+			width: 150px;
+		}
+		.form {
+			display: contents;
+		}
+	</style>
+</head>
+<body style="font-family: helvetica; font-size: smaller;">
+
+<div style="display: grid">
+<div><h2>Zalogowany jako {{user.name}} {{user.surname}}!</h2><br/>
+{% if user.admin == 1 %}
+<h3>Jesteś administratorem</h3>
+{% else %}
+<h3>Jesteś zwykłym użytkownikiem</h3>
+{% endif %}
+</div>
+<div id="blad"></div>
+<br/>
+<form action="/logout" method="post">
+<input type="submit" value="Wyloguj" name="wyloguj" />
+</form>
+Zmień dane:<br/><br/>
+<input type="hidden" id="id" value="{{user.id}}"/>
+Imie<input type="text" id="name" value="{{user.name}}"/><br/>
+Nazwisko<input type="text" id="surname" value="{{user.surname}}"/><br/>
+<input type="submit" value="Zmień dane" id="changeData" />
+<p>
+{% if users != null %}
+{% for ouser in users %}
+{% if(ouser.id != user.id) %}
+<div id="div{{ouser.id}}">
+Login {{ouser.login}}<br/>
+<input type="button" value="Usuń użytkownika" name="{{ouser.id}}" class="deleteUser"></input>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+</p>
+
+</div>
+<script>
+	$("#changeData").click(function() {
+		var id = $("#id").val();
+		var name = $("#name").val();
+		var surname = $("#surname").val();
+
+		var url = "/api/updateUser";
+
+		var data = {
+			"id": id,
+			"name": name,
+			"surname": surname,
+		};
+		
+		$.ajax({
+			dataType: "json",
+			type: 'UPDATE',
+			url: url,
+			data: JSON.stringify(data),
+			contentType: 'application/json; charset=utf-8',
+			success: function(result) {
+				if(result["error"] != undefined) {
+					$("#blad").html('<span style="color: red">' + result["error"] + '</span>');
+				} 
+				if(result["success"] != undefined) {
+					$("#blad").html('<span style="color: blue">' + result["success"] + '</span>');
+				}
+			}
+		});
+	});
+	
+	$(".deleteUser").click(function() {
+		var id = $(this).attr("name");
+
+		var url = "/api/deleteUser";
+
+		var data = {
+			"id": id,
+		};
+		$.ajax({
+			dataType: "json",
+			type: 'DELETE',
+			url: url,
+			data: JSON.stringify(data),
+			contentType: 'application/json; charset=utf-8',
+			success: function(result) {
+				if(result["error"] != undefined) {
+					$("#blad").html('<span style="color: red">' + result["error"] + '</span>');
+				} 
+				if(result["success"] != undefined) {
+					$("#blad").html('<span style="color: blue">' + result["success"] + '</span>');
+					$("#div" + id).css("display", "none");
+				}
+			}
+		});
+	});
+</script>
+</body>
+</html>

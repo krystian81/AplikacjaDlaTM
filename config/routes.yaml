@@ -1,0 +1,21 @@
+index:
+    path: /
+    controller: App\Controller\LoginController::showLoginPage
+app_login_form:
+    path: /loginForm
+    controller: App\Controller\LoginController::showLoginPage
+app_login:
+    path: /login
+    controller: App\Controller\LoginController::login
+app_logout:
+    path: /logout
+    controller: App\Controller\LoginController::logout
+panel:
+    path: /panel
+    controller: App\Controller\PanelController::showPanelPage
+create_account:
+    path: /createAccount
+    controller: App\Controller\AccountController::showCreateAccountPage
+app_api:
+    resource: routing.yaml
+    prefix:   /api
